@@ -1,1 +1,46 @@
 # NMHTTPClient
+
+Customer need: Connect with people that connect with you.   
+  Allow the owners of local establishments to talk back to 
+  their user base and, give them deals and encourage loayalty 
+  and repeat business.
+User need : Recommend and be recommended places and things to do.
+How Nom Solves this: We have built a recommendation engine for telling 
+  our users what are the best bet spots right around where they are, 
+  and built a engagement platform for our customers to connect back 
+  to their users.
+
+Technically speaking:
+2 x 2GB Servers at Network Redux
+Ubuntu 10.04 x64
+Ruby Enterprise Edition
+### Rails 3.1.3
+    - API @ https://justnom.it
+    - Engagement Platform
+    - Soon: Publication Portal
+    - Vendor portal
+### MongoDB 2.0.1
+    - Analytics
+    - Aggregations
+    - Geolocation data
+    - Revision history
+    - Social actions
+    - Publications
+    - Items
+### MySQL 5.5.18 Percona w/ XtraDB
+    - Users
+    - Locations
+    - Followers
+### Memcached
+    - Image records
+    - Metadata
+    - Locations/Items
+    - Public user objects
+### Nginx
+    - Reverse proxy
+    - Accepts and forwards attachments
+
+### Examples of the API
+    - https://justnom.it/locations/here.json?lat=37.7969398498535&lng=-122.399559020996
+    - https://justnom.it/activities.json?user_nid=4eccc0fbeef0a64dcf000001
+    - https://justnom.it/locations/search.json?lng=-122.3898&lat=37.81273&query=king
