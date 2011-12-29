@@ -34,6 +34,10 @@
 #define THUMB_UP @"1"
 #define THUMB_MEH @"2"
 
+#define RANK_BEST @"1"
+#define RANK_SECOND @"2"
+#define RANK_THIRD @"3"
+
 @class AFHTTPClient, NMCurrentLocation;
 
 @interface NMUtil : NSObject
