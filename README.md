@@ -27,20 +27,44 @@
 4.  In the file select window navigate to where you checked out the repo (`Nom-iOS-API`) to.
 5.  NOTE: For the next step check the boxes that say `Copy items into destination folder if needed` AND `Create groups for any added folders`.
 5a. Feel free to link the folders and not copy to dest folder if you have done so in the past.
-6.  You add the `src` folder to your project 
+6.  You add the `Nom-iOS-API` folder to your project 
 
 ####Test:
-7.  Build your project to make sure you have no errors `CMD + b`
-8.  In the files were calls to the API will be made simply add `#import "NMClient.h"` to the top.
-9.  .
+1.  Build your project to make sure you have no errors `CMD + b`
+2.  In the files were calls to the API will be made simply add `#import "NMClient.h"` to the top.
 
 ####For Help:
 - Submit an Issue @ <https://github.com/bnorton/Nom-iOS-API/issues> or send mail to <support@justnom.it> if you have any issues.
 
-#Examples:
+#Example Usage:
 ## Locations
+    [NMClient here:current_distance categories:nil cost:@"$$"  limit:20
+     success:^(NSDictionary *response) {
+           @try {
+               filtered = [self filterResults:[response objectForKey:@"results"]];
+           } @catch (NSException *ex) {
+               [ViewHelper showErrorInView:self.view message:@"Failed to parse locations around here"];
+           }
+           [self updateComplete];
+     }
+     failure:^(NSDictionary *response) {
+       [ViewHelper showErrorInView:self.view message:@"Failed to load items around here"];
+       [self updateComplete];
+     }];
 
 ## Users
+    [NMHTTPClient registerUserEmail:email.text password:password.text screen_name:nil success:^(NSDictionary *response) {
+        @try {
+            NSDictionary *user = [[response objectForKey:@"results"] objectAtIndex:0];
+            [self setUpUser:user];
+            [self setUpdateDate:[NSDate date]];
+            [ViewHelper showInformationInView:self.view message:@"Successfully registered!"];
+        } @catch (NSException *ex) { }
+        [spinner hide:YES];
+    } failure:^(NSDictionary *response) {
+        [ViewHelper showErrorInView:self.view message:@"Failed to register"];
+        [spinner hide:YES]; 
+    }];
 
 ## Following
 
