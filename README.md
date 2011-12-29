@@ -18,7 +18,9 @@
 1. Block based callbacks
   - This style of thinking and development keeps the post request handling in-line. All of your other code that helps bring 'data' to the user is there way not the post-request code as well. 
   - Blocks makes certain things more tightly coupled and more specific to a certain instance of a call. This can lead to loss of generality. However, in most cases you will not have this problem.
-2. If the code that you find yourself duplicating is with the use of NMClient then you may need to consider how to abstract other parts of your MVC structure.
+  - If the code that you find yourself duplicating is with the use of NMClient then you may need to consider how to abstract other parts of your MVC structure.
+2. AFNetworking
+  - It's a more lightweight and 'new' version of ASIHTTPRequest. I found the latter to be tough to wrangle due to the specific callback structure among other factors where the former seemed more grownup (and not deprecated).
 
 ###Dependencies:
 - AFNetworking (https://github.com/AFNetworking/AFNetworking) ==> follow directions to integrate this
