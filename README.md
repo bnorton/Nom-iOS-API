@@ -14,6 +14,12 @@
 - ARC based project (simple modifications can be made to make this a manually managed memory library)
 - common sense
 
+###Design Choices:
+1. Block based callbacks
+- This style of thinking and development keeps the post request handling in-line. All of your other code that helps bring 'data' to the user is there way not the post-request code as well. 
+- Blocks makes certain things more tightly coupled and more specific to a certain instance of a call. This can lead to loss of generality. However, in most cases you will not have this problem.
+- If the code that you find yourself duplicating is with the use of NMClient then you may need to consider how to abstract other parts of your MVC structure.
+
 ###Dependencies:
 - AFNetworking (https://github.com/AFNetworking/AFNetworking) ==> follow directions to integrate this
 - Make to change the build flags to include `-fno-objc-arc` for the files of AFNetworking
