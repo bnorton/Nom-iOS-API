@@ -53,7 +53,7 @@
      }];
 
 ## Users
-    [NMHTTPClient registerUserEmail:email.text password:password.text screen_name:nil success:^(NSDictionary *response) {
+    [NMClient registerUserEmail:email.text password:password.text screen_name:nil success:^(NSDictionary *response) {
         @try {
             NSDictionary *user = [[response objectForKey:@"results"] objectAtIndex:0];
             [self setUpUser:user];
@@ -61,10 +61,10 @@
             [ViewHelper showInformationInView:self.view message:@"Successfully registered!"];
         } @catch (NSException *ex) { }
         [spinner hide:YES];
-    } failure:^(NSDictionary *response) {
+     } failure:^(NSDictionary *response) {
         [ViewHelper showErrorInView:self.view message:@"Failed to register"];
         [spinner hide:YES]; 
-    }];
+     }];
 
 ## Following
 
