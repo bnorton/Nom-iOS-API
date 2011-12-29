@@ -31,6 +31,9 @@
 #define HTTPClient [NMUtil http_client]
 #define HTTPQueue [NMUtil queue]
 
+#define THUMB_UP @"1"
+#define THUMB_MEH @"2"
+
 @class AFHTTPClient, NMCurrentLocation;
 
 @interface NMUtil : NSObject
