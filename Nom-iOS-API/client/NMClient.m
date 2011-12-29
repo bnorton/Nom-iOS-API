@@ -234,7 +234,7 @@
 + (void)thumbLocation:(NSString *)location_nid value:(NSString *)value
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
-    
+
     [NMClient thumbValue:value path:[NSString stringWithFormat:@"/locations/%@/thumbs/create.json",location_nid] 
                 success:success failure:failure];
 }
@@ -242,51 +242,42 @@
 + (void)thumbUser:(NSString *)their_user_nid value:(NSString *)value
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
-    
+
     [NMClient thumbValue:value path:[NSString stringWithFormat:@"/users/%@/thumbs/create.json",their_user_nid] 
                      success:success failure:failure];
-}
-
-/**
- * Posting to networks
- */
-
-+ (void)publish:(NSString *)bl success:(void (^)(NSDictionary * response))success
-     failure:(void (^)(NSDictionary * response))failure {
-    
-    NSArray *items  = [NSArray arrayWithObjects:bl,nil];
-    NSArray *params = [NSArray arrayWithObjects: nil];
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
-    [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/register.json" parameters:parameters success:success failure:failure];
 }
 
 /**
  * Ranking
  */
 
-+ (void)rank:(NSString *)location_nid value:(NSString *)rank_value 
++ (void)rank:(NSString *)location_nid value:(NSString *)rank_value facebook:(BOOL)facebook
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
-    
-    NSArray *items  = [NSArray arrayWithObjects:location_nid, nil];
-    NSArray *params = [NSArray arrayWithObjects:@"location_nid", nil];
+
+    if(rank_value == nil) {
+        if(failure)
+            failure(nil);
+        return;
+    }
+    NSArray *items  = [NSArray arrayWithObjects:value,facebook, nil];
+    NSArray *params = [NSArray arrayWithObjects:@"value", @"facebook", nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
-    [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/register.json" parameters:parameters success:success failure:failure];
-    
+
+    [NMClient enqueueRequestWithMethod:@"POST" path:[NSString stringWithFormat:@"/locations/%@/rank/create.json", location_nid]
+                            parameters:parameters success:success failure:failure];
 }
 
 + (void)removeRank:(NSString *)rank_nid 
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
-    
+
     NSArray *items  = [NSArray arrayWithObjects:rank_nid, nil];
     NSArray *params = [NSArray arrayWithObjects:@"rank_nid", nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
-    [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/register.json" parameters:parameters success:success failure:failure];
-    
+
+    [NMClient enqueueRequestWithMethod:@"POST" path:[NSString stringWithFormat:@"/locations/%@/rank/destroy.json", location_nid]
+                            parameters:parameters success:success failure:failure];
 }
 
 /**

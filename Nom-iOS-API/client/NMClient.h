@@ -80,7 +80,7 @@
 /* #######################################################################
  * ########################### PUBLISHING ################################
  */
-+ (void)rank:(NSString *)location_nid value:(NSString *)rank_value 
++ (void)rank:(NSString *)location_nid value:(NSString *)rank_value facebook:(BOOL)facebook
                     success:(void (^)(NSDictionary * response))success
                     failure:(void (^)(NSDictionary * response))failure;
 
