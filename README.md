@@ -64,7 +64,7 @@
      }];
 
 ####Location Search:
-    [NMHTTPClient searchLocation:query location:where success:^(NSDictionary *response) {
+    [NMClient searchLocation:query location:where success:^(NSDictionary *response) {
         items = [response objectForKey:@"results"];
         [self updateComplete];
      } failure:^(NSDictionary *response) {
@@ -83,14 +83,14 @@
      }];
 
 ####Detail:
-    [NMHTTPClient userDetail:user_nid success:^(NSDictionary *response) {
+    [NMClient userDetail:user_nid success:^(NSDictionary *response) {
         [self setupUserContent:[[response objectForKey:@"results"] objectAtIndex:0]];
      } failure:^(NSDictionary *response) {
         [ViewHelper showErrorInView:self.view message:@"Failed to fetch user detail"];
      }];
 
 ####User Search (by name, screen_name, or email):
-    [NMHTTPClient searchUser:query success:^(NSDictionary *response) {
+    [NMClient searchUser:query success:^(NSDictionary *response) {
         items = [response objectForKey:@"results"];
         [self updateComplete];
     } failure:^(NSDictionary *response) {
@@ -98,14 +98,14 @@
 
 ## Following:
 ####Follow another Nommer:
-    [NMHTTPClient follow:user_nid success:^(NSDictionary *response) {
+    [NMClient follow:user_nid success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:[NSString stringWithFormat:@"Now Following %@", user_name]];
      } failure:^(NSDictionary *response) {
         [ViewHelper showErrorInView:self.view message:[NSString stringWithFormat:@"Cound not Follow %@", user_name]];
      }];
 
 ####A user's followers:
-    [NMHTTPClient followersFor:user_nid withSuccess:^(NSDictionary *_response) {
+    [NMClient followersFor:user_nid withSuccess:^(NSDictionary *_response) {
         followers = [response objectForKey:@"results"];
         [self updateComplete];
      } failure:^(NSDictionary *_response) {
@@ -115,7 +115,7 @@
 
 ##Timeline:
 ####Fetch the currentUser's Timeline:
-    [NMHTTPClient activitiesWithSuccess:^(NSDictionary *response) {
+    [NMClient activitiesWithSuccess:^(NSDictionary *response) {
         recommends = [response objectForKey:@"recommends"];
         thumbs = [response objectForKey:@"thumbs"];
         [self updateAndMerge];
@@ -131,7 +131,7 @@
     #define RANK_SECOND @"2"
     #define RANK_THIRD @"3"
     ...
-    [NMHTTPClient rank:location_nid value:rank_value facebook:NO
+    [NMClient rank:location_nid value:rank_value facebook:NO
      success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:@"Rank was successful"];
      } failure:^(NSDictionary *response) {
@@ -140,7 +140,7 @@
 
 ####Remove a rank:
 ######Rank will simply be removed and its value can be used on another location_nid:
-    [NMHTTPClient removeRank:rank_nid
+    [NMClient removeRank:rank_nid
      success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:@"Rank was removed successful"];
      } failure:^(NSDictionary *response) {
@@ -149,7 +149,7 @@
 
 ## Recommendations:
 ####Recommend a location to followers:
-    [NMHTTPClient recommend:location_nid imageNid:image_nid text:text facebook:NO token:nil
+    [NMClient recommend:location_nid imageNid:image_nid text:text facebook:NO token:nil
      success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:@"Recommend was successful"];
      } failure:^(NSDictionary *response) {
@@ -161,7 +161,7 @@
     #define THUMB_UP @"1"
     #define THUMB_MEH @"2"
     ...
-    [NMHTTPClient thumbLocation:location_nid value:MEH success:^(NSDictionary *response) {
+    [NMClient thumbLocation:location_nid value:MEH success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:@"Saved your thumb."];
      } failure:^(NSDictionary *response) {
         [ViewHelper showErrorInView:self.view message:@"There was an issue saving your thumb."];
@@ -171,4 +171,4 @@
 ####Image Fetch:
     @try { url = [[[l objectForKey:@"images"] objectAtIndex:0] objectForKey:@"url"]; }
     @catch(NSException *ex) {}
-    if(url) { [NMHTTPClient imageFetch:url]; }
+    if(url) { [NMClient imageFetch:url]; }
