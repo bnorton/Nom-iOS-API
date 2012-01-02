@@ -51,13 +51,16 @@
     /* Setup the geo-location params if we should */
     if(location) {
         NSNumber *lat = [NSNumber numberWithFloat:[[NMUtil currentLocation] lat]];
-        if (lat) { [params setObject:lat forKey:@"lat"]; }
+        if (lat != 0.0f) { [params setObject:lat forKey:@"lat"]; }
 
         NSNumber *lng = [NSNumber numberWithFloat:[[NMUtil currentLocation] lng]];
-        if (lat) { [params setObject:lng forKey:@"lng"]; }
+        if (lat != 0.0f) { [params setObject:lng forKey:@"lng"]; }
     }
 }
 
+/**
+  * The general purpose request method that all other requests go through
+  */
 + (void)enqueueRequestWithMethod:(NSString *)method path:(NSString *)path 
                       parameters:(NSMutableDictionary *)parameters defaultParams:(BOOL)params
                          success:(void (^)(NSDictionary * response))success
@@ -99,7 +102,12 @@
     if (email)       { [parameters setObject:email forKey:@"email"]; }
     if (password)    { [parameters setObject:password forKey:@"password"]; }
     if (screen_name) { [parameters setObject:screen_name forKey:@"screen_name"]; }
-    
+
+    if(! (email && password)) {
+        if(failure) failure(nil);
+        return;
+    }
+
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/register.json" parameters:parameters success:success failure:failure];
 }
 
@@ -182,7 +190,7 @@
     NSArray *items  = [NSArray arrayWithObjects:identifier, nil];
     NSArray *params = [NSArray arrayWithObjects:@"query", nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    if (location != nil) { [parameters setObject:location forKey:@"where"]; }
+    if (location) { [parameters setObject:location forKey:@"where"]; }
     
     [NMClient enqueueRequestWithMethod:@"GET" path:path parameters:parameters success:success failure:failure];
     
@@ -257,8 +265,7 @@
                 failure:(void (^)(NSDictionary * response))failure {
 
     if(rank_value == nil) {
-        if(failure)
-            failure(nil);
+        if(failure) failure(nil);
         return;
     }
     NSArray *items  = [NSArray arrayWithObjects:value,facebook, nil];
@@ -273,6 +280,10 @@
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
 
+    if(! rank_nid) {
+        if(failure) failure(nil);
+        return;
+    }
     NSArray *items  = [NSArray arrayWithObjects:rank_nid, nil];
     NSArray *params = [NSArray arrayWithObjects:@"rank_nid", nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
