@@ -1,14 +1,14 @@
 #Making Location Aware Applications
-####NMClient includes bindings for easily asking for the device's current location
+###NMClient includes bindings for easily asking for the device's current location
 
-######In tit's current form you can just ask for the latitude and longitude simply:
+#####In it's current form you can just ask for the latitude and longitude simply:
 
 ``` ruby
 latitude = [[NMUtil currentLocation] lat];
 longitude = [[NMUtil currentLocation] lng];
 ```
 
-######You may want to start and stop updating the user's location for better battery..
+#####You may want to start and stop updating the user's location for better battery..
 ``` ruby
 [[NMUtil currentLocation] stopUpdating];
 
