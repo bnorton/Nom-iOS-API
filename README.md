@@ -44,6 +44,18 @@
 2. AFNetworking
   - It's a more lightweight and 'new' version of ASIHTTPRequest. I found the latter to be tough to wrangle due to the specific callback structure among other factors where the former seemed more grownup (and not deprecated).
 
+#Example Usage for `current{User, Location}`:
+####The user object holds the values for:
+```
+auth_token, user_nid, email, name, screen_name, image_url, created_at, updated_at, city and follower_count
+```
+``` ruby
+NSDictionary *user = [[NMUtil currentUser] user];
+[self setName:[user objectForKey:@"name"]];
+[self setFollowersCount:[user objectForKey:@"follower_count"]];
+...
+```
+
 #Example Usage:
  
 ####Note:
