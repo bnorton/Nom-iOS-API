@@ -154,4 +154,8 @@
 + (void)categoriesWithSuccess:(void (^)(NSDictionary * response))success
                     failure:(void (^)(NSDictionary * response))failure;
 
++ (void)categoriesForLocation:(NSString*)location_nid 
+                      success:(void (^)(NSDictionary * response))success
+                      failure:(void (^)(NSDictionary * response))failure;
+
 @end

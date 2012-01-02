@@ -90,7 +90,6 @@
 /**
  * User Management
  */
-
 + (void)registerUserEmail:(NSString *)email password:(NSString *)password screen_name:(NSString *)screen_name
                   success:(void (^)(NSDictionary * response))success
                   failure:(void (^)(NSDictionary * response))failure {
@@ -115,20 +114,23 @@
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/login.json" parameters:parameters success:success failure:failure];
 }
 
-+(void)meWithSuccess:(void (^)(NSDictionary * response))success 
+/**
+  * Fetch the user detail associated with the current user.
+  */
++ (void)meWithSuccess:(void (^)(NSDictionary * response))success 
              failure:(void (^)(NSDictionary * response))failure {
 
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/me.json" parameters:nil success:success failure:failure];
 }
 
-+(void)screenNameCheck:(NSString *)screen_names success:(void (^)(NSDictionary * response))success 
++ (void)screenNameCheck:(NSString *)screen_names success:(void (^)(NSDictionary * response))success 
                failure:(void (^)(NSDictionary * response))failure {
 
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:screen_names forKey:@"screen_name"];
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/check.json" parameters:parameters success:success failure:failure];
 }
 
-+(void)userDetail:(NSString *)user_nid success:(void (^)(NSDictionary * response))success 
++ (void)userDetail:(NSString *)user_nid success:(void (^)(NSDictionary * response))success 
                failure:(void (^)(NSDictionary * response))failure {
 
     [NMClient enqueueRequestWithMethod:@"GET" path:[NSString stringWithFormat:@"/users/%@/detail.json", user_nid] parameters:nil success:success failure:failure];
@@ -137,7 +139,6 @@
 /**
  * Location Based Services
  */
-
 + (void)here:(CGFloat)distance categories:(NSString *)categories cost:(NSString *)cost limit:(NSUInteger)limit
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
@@ -145,13 +146,16 @@
     NSMutableArray *items  = [[NSMutableArray alloc] initWithCapacity:4];
     NSMutableArray *params = [[NSMutableArray alloc] initWithCapacity:4];
 
-    if (distance < 0.25) { distance = 0.24f;  }
-    if (distance > 5.0f) { distance = 5.01f;  }
+    /** default to a tenth of a mile if out of range (low)  */
+    /** default to a five miles if out of range (high)      */
+    if (distance < 0.25) { distance = 0.24f; }
+    if (distance > 5.0f) { distance = 5.01f; }
     [items addObject:[NSString stringWithFormat:@"%f", distance]];
     [params addObject:@"dist"];
 
-    if (limit < 6)  { limit = 6; }
-    if (limit > 25) { limit = 24; }
+    /** Always ask for at least 6 and no more than 30 */
+    if (limit < 6)  { limit = 6;  }
+    if (limit > 30) { limit = 30; }
     [items addObject:[NSString stringWithFormat:@"%d", limit]];
     [params addObject:@"limit"];
 
@@ -164,13 +168,13 @@
         [params addObject:@"cost"];
     }
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
+
     [NMClient enqueueRequestWithMethod:@"GET" path:@"/locations/here.json" parameters:parameters success:success failure:failure];
-    
 }
 
-/** Location :: Search / User :: Search */
-
+/**
+  * Location :: Search / User :: Search
+  */
 + (void)search:(NSString *)identifier path:(NSString *)path location:(NSString *)location
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
@@ -200,11 +204,10 @@
 /**
  * Category fetching
  */
-
 + (void)categoriesWithSuccess:(void (^)(NSDictionary * response))success
      failure:(void (^)(NSDictionary * response))failure {
     
-    [NMClient enqueueRequestWithMethod:@"POST" path:@"/categories/all.json" 
+    [NMClient enqueueRequestWithMethod:@"GET" path:@"/categories/all.json" 
                              parameters:nil success:success failure:failure];
 }
 
@@ -212,14 +215,13 @@
                       success:(void (^)(NSDictionary * response))success
                       failure:(void (^)(NSDictionary * response))failure {
     
-    [NMClient enqueueRequestWithMethod:@"POST" path:[NSString stringWithFormat:@"/locations/%@/categories.json", location_nid]
+    [NMClient enqueueRequestWithMethod:@"GET" path:[NSString stringWithFormat:@"/locations/%@/categories.json", location_nid]
                              parameters:nil success:success failure:failure];
 }
 
 /**
  * Thumbs
  */
-
 + (void)thumbValue:(NSString *)value path:(NSString *)path
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
@@ -250,7 +252,6 @@
 /**
  * Ranking
  */
-
 + (void)rank:(NSString *)location_nid value:(NSString *)rank_value facebook:(BOOL)facebook
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
@@ -283,7 +284,6 @@
 /**
  * Recommendations
  */
-
 + (void)recommend:(NSString *)location_nid imageNid:(NSString *)image_nid 
              text:(NSString *)text facebook:(BOOL)facebook token:(NSString *)token
                     success:(void (^)(NSDictionary * response))success
@@ -301,12 +301,16 @@
 
     /* Construct and begin the request with callbacks */
     NSMutableURLRequest *request = [HTTPClient multipartFormRequestWithMethod:@"POST" path:@"/recommendation/create.json" 
-                                                                   parameters:parameters 
-                                                    constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
-                                                        /* Construct with Image Data */
-                                                    }];
+                                        parameters:parameters 
+    constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+    /**
+      * TODO support Image attachents the main request
+      * Construct with Image Data
+      */
+    }];
 
     AFJSONRequestOperation *operation = [[AFJSONRequestOperation alloc] initWithRequest:request];
+
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) { success(responseObject); }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -319,7 +323,6 @@
 /**
  * Following / Followers
  */
-
 + (void)followAction:(NSString *)path toUserId:(NSString *)to_user_nid 
            success:(void (^)(NSDictionary * response))success
            failure:(void (^)(NSDictionary * response))failure {
@@ -327,25 +330,22 @@
     NSArray *items  = [NSArray arrayWithObjects:to_user_nid, nil];
     NSArray *params = [NSArray arrayWithObjects:@"to_user_nid", nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
+
     [NMClient enqueueRequestWithMethod:@"POST" path:path parameters:parameters success:success failure:failure];
-    
 }
 
 + (void)follow:(NSString *)to_user_nid 
        success:(void (^)(NSDictionary * response))success
        failure:(void (^)(NSDictionary * response))failure {
-    
+
     [NMClient followAction:@"/follow/create.json" toUserId:to_user_nid success:success failure:failure];
-    
 }
 
 + (void)unFollow:(NSString *)to_user_nid 
        success:(void (^)(NSDictionary * response))success
        failure:(void (^)(NSDictionary * response))failure {
-    
+
     [NMClient followAction:@"/follow/destroy.json" toUserId:to_user_nid success:success failure:failure];
-    
 }
 
 + (void)followFor:(NSString *)user_nid path:(NSString *)path success:(void (^)(NSDictionary * response))success
@@ -355,8 +355,8 @@
     if ( ! [user_nid isEqualToString:[NMCurrentUser getStringForKey:@"user_nid"]]) {
         params = [NSMutableDictionary dictionaryWithObject:user_nid forKey:@"user_nid"];
     }
+
     [NMClient enqueueRequestWithMethod:@"GET" path:path parameters:params success:success failure:failure];
-    
 }
 
 + (void)followersFor:(NSString *)user_nid withSuccess:(void (^)(NSDictionary * response))success
@@ -373,8 +373,8 @@
 
 /**
  * Comments
+ * TODO: Comment fetch.
  */
-
 + (void)commentAboutLocation:(NSString *)location_nid text:(NSString *)text inResponseTo:(NSString *)response_to
                 success:(void (^)(NSDictionary * response))success
                 failure:(void (^)(NSDictionary * response))failure {
@@ -399,7 +399,6 @@
     if(response_to) { [parameters setObject:response_to forKey:@"parent_nid"]; }
 
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/comments/create.json" parameters:parameters success:success failure:failure];
-
 }
 
 + (void)commentOnRecommendation:(NSString *)recommendation_nid text:(NSString *)text inResponseTo:(NSString *)response_to
@@ -413,9 +412,12 @@
     if(response_to) { [parameters setObject:response_to forKey:@"parent_nid"]; }
 
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/comments/create.json" parameters:parameters success:success failure:failure];
-
 }
 
+/** 
+  * Must have the comment_nid to destroy a comment (and 
+  * be the user that created said comment)
+  */
 + (void)commentDestroy:(NSString *)comment_nid
                         success:(void (^)(NSDictionary * response))success
                         failure:(void (^)(NSDictionary * response))failure {
@@ -423,15 +425,17 @@
     NSArray *items  = [NSArray arrayWithObjects:comment_nid,nil];
     NSArray *params = [NSArray arrayWithObjects:@"comment_nid",nil];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjects:items forKeys:params];
-    
+
     [NMClient enqueueRequestWithMethod:@"POST" path:@"/comments/destroy.json" parameters:parameters success:success failure:failure];
-    
 }
 
 /**
  * Activities
  */
 
+/**
+  * Basically just fetch the Timeline for the currently authed user
+  */
 + (void)activitiesWithSuccess:(void (^)(NSDictionary * response))success
                       failure:(void (^)(NSDictionary * response))failure {
  
@@ -446,9 +450,8 @@
 }
 
 /**
- * Upload Arbitrary Image
+ * Fetch / Upload Arbitrary Images
  */
-
 + (void)imageFetch:(id)image_path {
     NSURL *url = [image_path isKindOfClass:[NSURL class]] ? image_path : [NSURL URLWithString:image_path];
     AFImageRequestOperation *operation = [[AFImageRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
@@ -474,17 +477,20 @@
     }];
     __block BOOL local_file = local;
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSURLResponse *response, id JSON) {
-        if(local_file) {
-            NSFileManager *filemgr = [NSFileManager defaultManager];
-            NSString *image_filepath_key = [NSString stringWithFormat:@"%@_image_path",location_nid];
-            NSString *path = [NMCurrentUser getStringForKey:image_filepath_key];
-            if ([filemgr removeItemAtPath: path error: NULL] == YES) {}
-        }
+        @try {
+            if(local_file) {
+                NSFileManager *filemgr = [NSFileManager defaultManager];
+                NSString *image_filepath_key = [NSString stringWithFormat:@"%@_image_path",location_nid];
+                NSString *path = [NMCurrentUser getStringForKey:image_filepath_key];
+                if ([filemgr removeItemAtPath: path error: NULL] == YES) {}
+            }
+        } @catch (NSException *ex) { ; }
+
         if (success) { success(JSON); }
     } failure:^(NSURLRequest *request, NSURLResponse *response, NSError *error, id JSON) {
         if (failure) { failure(JSON); }
     }];
-        
+
     [operation setUploadProgressBlock:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
         if (progress) {
             progress(totalBytesWritten,totalBytesExpectedToWrite);
@@ -494,6 +500,16 @@
     [HTTPQueue addOperation:operation];
 }
 
+/**
+  * Write a BOOL {YES, NO} to `@"%@_image_present?",location_nid` to `currentUser`
+  *   with the command [[NMUtil currentUser] setBoolean:YES forKey: ...]; and
+  *   the PNG image file to`@"%@_image_path",location_nid` which looks
+  *   like `4ec8b9bdeef0a679f8000812_image_path` and then simply call
+  *   this method which will read your file and send the upload.
+  * Usage: when you want to save the state of a Recommendation or Image upload
+  *   that may not happen before the device is locked or if the upload fails then
+  *   persist the stored image to disk under that path and try again later.
+  */
 + (void)imageUpload:(NSString *)location_nid
           success:(void (^)(NSDictionary * response))success
           failure:(void (^)(NSDictionary * response))failure
@@ -508,8 +524,8 @@
     if ([NMCurrentUser getBooleanForKey:image_presence_key]) {
         NSString *path = [NMCurrentUser getStringForKey:image_filepath_key];
         NSFileManager *filemgr = [NSFileManager defaultManager];
-        image_data = [filemgr contentsAtPath: path ];
-        
+        image_data = [filemgr contentsAtPath:path];
+
         if ([image_data length] > 0) {
             image_flag = TRUE;
         }
@@ -521,6 +537,7 @@
         return;
     }
 
+    /** fromLocalStore ensures that your file is erased when the upload completes */
     [NMClient imageUpload:location_nid imageData:image_data fromLocalStore:YES success:success failure:failure progress:progress];
 }
 
