@@ -48,10 +48,9 @@ static NSMutableDictionary *user = nil;
     if ([[defaults objectForKey:@"follower_count"] length] > 0){ [user setObject:[defaults objectForKey:@"follower_count"] forKey:@"follower_count"]; }
 }
 
-+ (void)initialize
-{
++ (void)initialize {
     static BOOL initialized = NO;
-    if(!initialized) {
+    if(! initialized) {
         initialized = YES;
 
         defaults = [NSUserDefaults standardUserDefaults];
@@ -103,7 +102,18 @@ static NSMutableDictionary *user = nil;
     [defaults synchronize];
 }
 
-/* Store the User details into the NSUserDefaults */
++ (id)getObjectForKey:(NSString *)key{
+    return [defaults objectForKey:key];
+}
+
++ (void)setObject:(id)obj forKey:(NSString *)key{
+    [defaults setObject:obj forKey:key];
+    [defaults synchronize];
+}
+
+/**
+  * Store the 'Nom User Object' into the NSUserDefaults
+  */
 + (void)setUser:(NSDictionary *)_user {
     if (_user != nil) {
         if ([[_user objectForKey:@"auth_token"] length] > 0) { [defaults setObject:[_user objectForKey:@"auth_token"] forKey:@"auth_token"]; }
@@ -136,15 +146,6 @@ static NSMutableDictionary *user = nil;
         [NMCurrentUser setBoolean:NO ForKey:@"user_logged_in"];
         [NMCurrentUser setBoolean:NO ForKey:@"logged_in_or_connected"];
     }
-}
-
-+ (id)getObjectForKey:(NSString *)key{
-    return [defaults objectForKey:key];
-}
-
-+ (void)setObject:(id)obj forKey:(NSString *)key{
-    [defaults setObject:obj forKey:key];
-    [defaults synchronize];
 }
 
 @end

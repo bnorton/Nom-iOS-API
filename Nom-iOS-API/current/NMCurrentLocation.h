@@ -40,4 +40,7 @@
 - (CGFloat)altitude;
 - (CGFloat)accuracy;
 
++ (NSArray *)imageUrlsFromImages:(NSArray *)images
++ (NSString *)primaryImageUrlFromImages:(NSArray *)images;
+
 @end

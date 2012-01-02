@@ -31,6 +31,10 @@
 
 + (NSDictionary *)user;
 
++ (void)setLoggedIn;
++ (void)setUser:(NSDictionary *)user;
++ (NSDictionary *)getUser;
+
 + (NSString *)getStringForKey:(NSString *)key;
 + (void)setNumber:(CGFloat)num ForKey:(NSString *)key;
 
@@ -43,13 +47,7 @@
 + (void)setDate:(NSDate *)date forKey:(NSString *)key;
 + (NSDate *)getDateForKey:(NSString *)key;
 
-+ (void)setUser:(NSDictionary *)user;
-+ (NSDictionary *)getUser;
-
-+ (void)setLoggedIn;
-
 + (id)getObjectForKey:(NSString *)key;
 + (void)setObject:(id)obj forKey:(NSString *)key;
-
 
 @end
