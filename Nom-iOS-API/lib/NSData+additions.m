@@ -25,15 +25,14 @@
 //  Copyright (c) 2012 Nom Inc. All rights reserved.
 //
 
-/* This convenience method is for image uploads so the image has a unique (probably)
- * name and identifier in the database.
- */
-
 #import "NSData+additions.h"
 #include <CommonCrypto/CommonDigest.h>
 
 @implementation NSData (additions)
 
+/* This convenience method is for image uploads so the image has a unique (probably)
+ * name and identifier in the database.
+ */
 - (NSString *)SHA1Sum {
     NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
     uint8_t digest[CC_SHA1_DIGEST_LENGTH];

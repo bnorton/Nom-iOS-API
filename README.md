@@ -1,11 +1,11 @@
-# Nom-iOS-API via [justnom.it](http://justnom.it)
+#Nom-iOS-API via [justnom.it](http://justnom.it)
 
 ### Quick (live) Examples of the userless API
 - https://justnom.it/locations/here.json?lat=37.79693&lng=-122.399559
 - https://justnom.it/activities.json?user_nid=4eccc0fbeef0a64dcf000001
 - https://justnom.it/locations/search.json?lng=-122.3898&lat=37.81273&query=sushi
 
-## Dependencies / Setup / Integration
+##Dependencies / Setup / Integration
 
 ###Assumptions:
 - XCode 4.3+
@@ -70,11 +70,14 @@
      } failure:^(NSDictionary *response) {
      }];
 
-## Users:
+##Users:
 ####Register:
     [NMClient registerUserEmail:email.text password:password.text screen_name:nil success:^(NSDictionary *response) {
         NSDictionary *user = [[response objectForKey:@"results"] objectAtIndex:0];
+        
+        /** The next line 
         [self setUpUser:user];
+        
         [ViewHelper showInformationInView:self.view message:@"Successfully registered!"];
         [spinner hide:YES];
      } failure:^(NSDictionary *response) {
@@ -96,7 +99,7 @@
     } failure:^(NSDictionary *response) {
     }];
 
-## Following:
+##Following:
 ####Follow another Nommer:
     [NMClient follow:user_nid success:^(NSDictionary *response) {
         [ViewHelper showInfoInView:self.view message:[NSString stringWithFormat:@"Now Following %@", user_name]];
@@ -124,7 +127,7 @@
         [self updateAndMerge];
      }];
 
-## Rankings:
+##Rankings:
 ####Rank a Location `the best`:
 ######If this location_nid has a rank or the user has ranked another location at this level then it will be replaced by this one.
     #define RANK_BEST @"1"
@@ -147,7 +150,7 @@
         [ViewHelper showErrorInView:self.view message:@"Rank was not removed successfully"];
      }];
 
-## Recommendations:
+##Recommendations:
 ####Recommend a location to followers:
     [NMClient recommend:location_nid imageNid:image_nid text:text facebook:NO token:nil
      success:^(NSDictionary *response) {
@@ -156,7 +159,7 @@
         [ViewHelper showErrorInView:self.view message:@"Nom publication failed :("];
      }];
 
-## Thumbs:
+##Thumbs:
 ####Thumb a Location with meh:
     #define THUMB_UP @"1"
     #define THUMB_MEH @"2"

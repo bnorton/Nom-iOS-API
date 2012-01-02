@@ -69,7 +69,7 @@ static NMCurrentLocation *_currentLocation;
     return sharedQueue;
 }
 
-+ (NMCurrentLocation *)NMCurrentLocation {
++ (NMCurrentLocation *)currentLocation {
     return _currentLocation;
 }
 
