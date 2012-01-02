@@ -207,9 +207,14 @@ NSDictionary *user = [[NMUtil currentUser] user];
 ```
 
 ##Images:
-####Image Fetch:
+####Image Fetch (to pre-cache an image for later use):
 ``` ruby
+    NSString *url = nil;
     @try { url = [[[l objectForKey:@"images"] objectAtIndex:0] objectForKey:@"url"]; }
     @catch(NSException *ex) {}
     if(url) { [NMClient imageFetch:url]; }
+    
+    /** ...then later just use */
+    UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5 ,90, 90)];
+    [image setImageWithURL:[NSURL urlWithString:url]];
 ```
