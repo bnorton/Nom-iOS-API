@@ -135,7 +135,7 @@
                failure:(void (^)(NSDictionary * response))failure {
 
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:screen_names forKey:@"screen_name"];
-    [NMClient enqueueRequestWithMethod:@"POST" path:@"/users/check.json" parameters:parameters success:success failure:failure];
+    [NMClient enqueueRequestWithMethod:@"GET" path:@"/users/check.json" parameters:parameters success:success failure:failure];
 }
 
 + (void)userDetail:(NSString *)user_nid success:(void (^)(NSDictionary * response))success 
