@@ -1,9 +1,9 @@
 #Nom-iOS-API via [justnom.it](http://justnom.it)
 
 ### Quick (live) Examples of the userless API
-- https://justnom.it/locations/here.json?lat=37.79693&lng=-122.399559
-- https://justnom.it/activities.json?user_nid=4eccc0fbeef0a64dcf000001
-- https://justnom.it/locations/search.json?lng=-122.3898&lat=37.81273&query=sushi
+- http://justnom.it/locations/here.json?lat=37.79693&lng=-122.399559
+- http://justnom.it/activities.json?user_nid=4eccc0fbeef0a64dcf000001
+- http://justnom.it/locations/search.json?lng=-122.3898&lat=37.81273&query=sushi
 
 ##Dependencies / Setup / Integration
 
